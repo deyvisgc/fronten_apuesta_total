@@ -1,0 +1,24 @@
+<div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+
+          <h4 class="card-title">Historial de Productos</h4><p></p>
+          <app-filter (filters)="getFilters($event)"></app-filter>
+          <div class="d-flex justify-content-end">
+            <button class="btn btn-outline-info btn-group-lg btn-sm" *ngIf="isRegistrar" (click)="open(content)">Nuevo <i
+              class="fas fa-plus"></i>
+            </button>
+          </div>
+          <app-list [filters]="filters" (update)="isUpdate($event)"></app-list>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #content let-modal>
+    <app-form (isSubmit)="isRegisterOrUpdate($event)"></app-form>
+  </ng-template>
+  <ng-template #modalActualizar let-modal>
+    <app-form (isSubmit)="isRegisterOrUpdate($event)"></app-form>
+  </ng-template>
+  <ng-template #successTpl> I'm a success toast </ng-template>

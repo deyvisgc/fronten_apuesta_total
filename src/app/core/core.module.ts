@@ -1,14 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PaginationComponent } from './component/pagination/pagination.component';
 import { SearchPipe } from './pipe/search.pipe';
+import { NumberOnlyDirective } from './directive/number-only.directive';
+import { NumberDecimalsDirective } from './directive/number-decimals.directive';
 
 
 @NgModule({
-  declarations: [PaginationComponent, SearchPipe],
+  declarations: [SearchPipe, NumberOnlyDirective, NumberDecimalsDirective],
   imports: [
     CommonModule,
   ],
-  exports: [PaginationComponent, SearchPipe]
+  exports: [SearchPipe, NumberOnlyDirective, NumberDecimalsDirective]
 })
 export class CoreModule { }

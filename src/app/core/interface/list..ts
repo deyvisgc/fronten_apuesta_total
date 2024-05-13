@@ -1,6 +1,10 @@
-export interface List {
-  limit: number,
-  offset: number,
-  totalRegistros: number,
-  registros: any
+import { Producto } from "./producto.interface"
+
+export interface ListPage {
+  limit?: number,
+  offset?: number,
+  totalPages: number,
+  totalElements: number
+  size: number
+  content: Producto
 }

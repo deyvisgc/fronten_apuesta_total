@@ -1,0 +1,73 @@
+
+
+<div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+
+          <h4 class="card-title">Asesores de Ventas</h4><p></p>
+          <!-- <app-filter (filters)="getFilters($event)"></app-filter> -->
+          <div class="d-flex justify-content-end">
+            <button class="btn btn-outline-info btn-group-lg btn-sm" (click)="open(content)">Nuevo <i
+              class="fas fa-plus"></i>
+            </button>
+          </div>
+
+          <div class="d-flex justify-content-between" style="margin-top: 50px;">
+            <div class="form-group">
+              <input type="text" class="form-control" [(ngModel)]="textSearch" id="name" placeholder="Buscar" />
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table align-middle text-nowrap">
+              <thead>
+                <tr>
+                  <th class="text-dark font-medium fs-4">Tipo Documento</th>
+                  <th class="text-dark font-medium fs-4">Numero Documento</th>
+                  <th class="text-dark font-medium fs-4">Nombre</th>
+                  <th class="text-dark font-medium fs-4">Telefono</th>
+                  <th class="text-dark font-medium fs-4">Email</th>
+                  <th class="text-dark font-medium fs-4">Fecha Registro</th>
+                  <th class="text-dark font-medium fs-4">Opciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngIf=" list| search : textSearch as result">        
+                  <tr *ngFor="let item of result | search:textSearch; let i = index">
+                    <td class="fs-4">{{item?.tipoDocumento === '01' ? 'DNI' : item?.tipoDocumento === '02' ? 'Carnet de Extranjeria' : 'Pasaporte'}}</td>
+                    <td class="fs-4">{{item?.numeroDocumento}}</td>
+                    <td class="fs-4">{{item?.nombre}} </td>
+                    <td class="fs-4">{{item?.telefono}}</td>
+                    <td class="fs-4">{{item?.email}}</td>
+                    <td class="fs-4">{{item?.FechaRegistro | date:"shortDate"}}</td>
+                    <td>
+                      <button type="button" ngbTooltip="Actualizar Producto" class="btn btn-outline-success w-sm btn-sm" style="margin-left: 5px">
+                        <span><i class="fas fa-edit"></i></span>
+                      </button>
+                      <button type="button" ngbTooltip="Eliminar Producto" (click)="eliminar(item.id)" class="btn w-sm btn-sm btn-outline-danger"
+                          style="margin-left: 5px">
+                          <span><i class="fas fa-trash"></i></span>
+                        </button>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+            <!-- <app-pagination [currentPage]="currentPage" [totalPages]="totalPages" [totalRegistros]="totalRegistros"
+              [totalRegistrosPage]="totalRegistroPage" (pageChange)="onPageChange($event)"></app-pagination> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Crear Asesor de Ventas</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="getDismissReason(0)"></button>
+      </div>
+      <div class="modal-body">
+        <app-form-register [isClient]="false" (isSubmit)="isRegisterOrUpdate($event)"></app-form-register>
+      </div>
+  </ng-template>
+  <ng-template #modalActualizar let-modal>
+  </ng-template>

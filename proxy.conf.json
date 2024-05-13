@@ -1,0 +1,12 @@
+{
+    "/api/cliente": {
+      "target": "http://localhost:8080/api/",
+      "secure": false,
+      "changeOrigin": true
+    },
+    "/api/movimiento": {
+      "target": "http://localhost:8081/api/",
+      "secure": false,
+      "changeOrigin": true
+    }
+  }

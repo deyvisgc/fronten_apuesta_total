@@ -1,0 +1,33 @@
+.custom-file-input {
+    visibility: hidden;
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+  }
+
+  .custom-file-input + label {
+    font-size: 1em;
+    font-weight: 400;
+    color: #fff;
+    background-color: #007bff;
+    display: inline-block;
+    cursor: pointer;
+    padding: 10px 20px;
+    border-radius: 5px;
+  }
+
+  .custom-file-input + label:hover {
+    background-color: #0056b3;
+  }
+
+  .custom-file-input:focus + label {
+    outline: 1px dotted #000;
+    outline: -webkit-focus-ring-color auto 5px;
+  }
+
+  .custom-file-input + label * {
+    pointer-events: none;
+  }

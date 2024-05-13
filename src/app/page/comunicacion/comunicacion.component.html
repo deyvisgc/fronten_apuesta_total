@@ -1,0 +1,274 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                <h4 class="card-title">Canal de Comunicacion de Clientes y Asesores de Ventas</h4>
+                <p></p>
+                <!-- <app-filter (filters)="getFilters($event)"></app-filter> -->
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-outline-info btn-group-lg btn-sm" (click)="open(content)">Nueva Comunicacion
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+
+                <div class="d-flex justify-content-between" style="margin-top: 50px;">
+                    <div class="form-group">
+                        <input type="text" class="form-control" [(ngModel)]="textSearch" id="name"
+                            placeholder="Buscar" />
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-middle text-nowrap">
+                        <thead>
+                            <tr>
+                                <th class="text-dark font-medium fs-4">Nombre Cliente</th>
+                                <th class="text-dark font-medium fs-4">Canal</th>
+                                <th class="text-dark font-medium fs-4">mensaje</th>
+                                <th class="text-dark font-medium fs-4">Id Jugador</th>
+                                <th class="text-dark font-medium fs-4">Nombre Asesor de Ventas</th>
+                                <th class="text-dark font-medium fs-4">Estado</th>
+                                <th class="text-dark font-medium fs-4">Fecha Registro</th>
+                                <th class="text-dark font-medium fs-4">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngIf=" list| search : textSearch as result">
+                                <tr *ngFor="let item of result | search:textSearch; let i = index">
+                                    <td class="fs-4">{{item?.nombreCliente}} </td>
+                                    <td class="fs-4">{{item?.canal === '01' ? 'WhatsApp' : item?.canal === '02' ?
+                                        'TeleGram' : 'Messenger'}}</td>
+                                    <td class="fs-4">
+                                        <button type="button" (click)="verMensaje(item?.mensaje, modalverMensaje)"
+                                            ngbTooltip="Ver Mensaje" class="btn btn-outline-success w-sm btn-sm"
+                                            style="margin-left: 5px">
+                                            <span><i class="fas fa-eye"></i> Ver</span>
+                                        </button>
+                                    </td>
+                                    <td class="fs-4">
+                                        <button type="button" (click)="verIdJugador(item?.idJugador, modalVeridJugador)"
+                                            ngbTooltip="Ver id Jugador" class="btn btn-outline-success w-sm btn-sm"
+                                            style="margin-left: 5px">
+                                            <span><i class="fas fa-eye"></i> Ver</span>
+                                        </button>
+                                    </td>
+                                    <td class="fs-4">{{item?.nombreAsesor}}</td>
+                                    <td class="fs-4">{{item?.estado === '1' ? 'Enviado' : 'Finalizado'}}</td>
+                                    <td class="fs-4">{{item?.fecha_registro | date:"shortDate"}}</td>
+                                    <td>
+                                        <button (click)="responder(item?.id, item?.clientId, modalActualizarEstado)" [disabled]="(roleLogin === '3' && item?.estado === '1') || (item?.estado === '2')"  type="button" ngbTooltip="Responder Mensaje"
+                                            class="btn btn-outline-success w-sm btn-sm" style="margin-left: 5px">
+                                            <span><i class="fas fa-edit"></i></span>
+                                        </button>
+                                        <button [disabled]="item?.estado === '1'" (click)="recargar(item?.idJugador, item?.canal, recargarModal)" type="button" ngbTooltip="Recargar Cuenta"
+                                        class="btn btn-outline-primary w-sm btn-sm" style="margin-left: 5px">
+                                        <span><i class="fas fa-edit"></i></span>
+                                    </button>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                    <!-- <app-pagination [currentPage]="currentPage" [totalPages]="totalPages" [totalRegistros]="totalRegistros"
+              [totalRegistrosPage]="totalRegistroPage" (pageChange)="onPageChange($event)"></app-pagination> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Crear Nueva Comunicación </h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="getDismissReason(0)"></button>
+    </div>
+    <div class="modal-body">
+        <div class="container mt-2">
+            <form  [formGroup]="comunicationForm" (ngSubmit)="onSubmit()">
+                <div class="form-group">
+                    <label for="canal">Canal</label>
+                    <ng-select [ngClass]="{ 'is-invalid': submitted && f.controls['channel'].errors }" [items]="chanels"
+                        formControlName="channel" [style.width.px]="740" bindLabel="name" bindValue="id">
+                    </ng-select>
+                    <div *ngIf="submitted && f.controls['channel'].errors" class="invalid-feedback">
+                        <div *ngIf="f.controls['channel'].errors?.['required']">Canal es requerido</div>
+                    </div>
+                </div>
+                <p></p>
+                <div class="form-group">
+                    <label for="canal">Id Jugador</label>
+                    <input type="text" class="form-control" formControlName="id_jugador"
+                        [ngClass]="{ 'is-invalid': submitted && f.controls['id_jugador'].errors }">
+
+                    <div *ngIf="f.controls['id_jugador'].errors" class="invalid-feedback">
+                        <span *ngIf="f.controls['id_jugador'].errors?.['required']">ID Jugador requerido</span>
+                    </div>
+                </div>
+                <p></p>
+                <div class="custom-dropdown-container">
+                    <div class="form-group">
+                        <label for="inputNombre">Asesores</label>
+                        <div class="input-group">
+                            <ng-select [ngClass]="{ 'is-invalid': submitted && f.controls['sales_id'].errors }"
+                                [items]="asesores" formControlName="sales_id" [style.width.px]="740" bindLabel="nombre"
+                                bindValue="id">
+                            </ng-select>
+                            <div *ngIf="submitted && f.controls['sales_id'].errors" class="invalid-feedback">
+                                <div *ngIf="f.controls['sales_id'].errors?.['required']">Asesor de venta es
+                                    requerido
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p></p>
+                <div class="form-group">
+                    <label for="mensaje">Mensaje</label>
+                    <textarea class="form-control" id="mensaje" rows="3" formControlName="message"
+                        [ngClass]="{ 'is-invalid': submitted && f.controls['message'].errors }"
+                        placeholder="Ingrese el mensaje"></textarea>
+                    <div *ngIf="f.controls['message'].errors" class="invalid-feedback">
+                        <span *ngIf="f.controls['message'].errors?.['required']">Mensaje requerido</span>
+                    </div>
+                </div>
+                <p></p>
+        
+                <button type="submit" class="btn btn-primary">
+                    <span class="d-flex justify-content-center" *ngIf="!isLoading">Enviar</span>
+                    <i *ngIf="isLoading" class="fas fa-spinner fa-pulse fa-1x"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</ng-template>
+<ng-template #modalverMensaje let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Mostrar Mensaje</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="getDismissReason(0)"></button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label for="exampleFormControlTextarea1">Mensaje</label>
+            <textarea class="form-control" readonly id="exampleFormControlTextarea1" rows="3">{{mensaje}}</textarea>
+        </div>
+    </div>
+</ng-template>
+<ng-template #modalVeridJugador let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Mostrar id Jugador</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="getDismissReason(0)"></button>
+    </div>
+    <div class="modal-body">
+        <input type="text" class="form-control" readonly [(ngModel)]="idJugador" id="exampleFormControlInput1"
+            placeholder="Enter text">
+    </div>
+</ng-template>
+<ng-template #modalActualizarEstado let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Responder Mensaje </h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="getDismissReason(0)"></button>
+    </div>
+    <div class="modal-body">
+        <div class="container mt-2">
+            <form  [formGroup]="responderForm" (ngSubmit)="onResponder()">
+                <p></p>
+                <div class="form-group">
+                    <label for="mensaje">Mensaje</label>
+                    <textarea class="form-control" rows="3" formControlName="resMessage"
+                        [ngClass]="{ 'is-invalid': submitted && res.controls['resMessage'].errors }"
+                        placeholder="Ingrese el mensaje"></textarea>
+                    <div *ngIf="res.controls['resMessage'].errors" class="invalid-feedback">
+                        <span *ngIf="res.controls['resMessage'].errors?.['required']">Mensaje requerido</span>
+                    </div>
+                </div>
+                <p></p>
+                <button type="submit" class="btn btn-primary">
+                    <span class="d-flex justify-content-center" *ngIf="!isLoadingResponse">Enviar</span>
+                    <i *ngIf="isLoadingResponse" class="fas fa-spinner fa-pulse fa-1x"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</ng-template>
+<ng-template #recargarModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Recargas para Apuestas Deportivas</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="getDismissReason(0)"></button>
+    </div>
+    <div class="modal-body">
+        <div class="container mt-2">
+            <form  [formGroup]="recargarForm" (ngSubmit)="recargarCuenta()">
+                <div class="row">
+                    <div class="col-md-6" >
+                        <div class="form-group">
+                            <label for="canal">Canal</label>
+                            <input type="text" class="form-control" formControlName="chanel" readonly >
+                        </div>
+                    </div>
+                    <div class="col-md-6" >
+                        <div class="form-group">
+                            <label for="canal">Id Jugador</label>
+                            <input type="text" class="form-control" formControlName="player_id" readonly >
+                        </div>
+                    </div>
+                    <p></p>
+                    <div class="col-md-6" >
+                        <div class="form-group">
+                            <label for="canal">Monto</label>
+                            <input type="text" class="form-control" appNumberDecimals formControlName="monto" [ngClass]="{ 'is-invalid': submitted && recar.controls['monto'].errors }">
+        
+                            <div *ngIf="recar.controls['monto'].errors" class="invalid-feedback">
+                                <span *ngIf="recar.controls['monto'].errors?.['required']">Monto es requerido</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" >
+                        <div class="custom-dropdown-container">
+                            <div class="form-group">
+                                <label for="inputNombre">BANCO</label>
+                                <div class="input-group">
+                                    <ng-select [ngClass]="{ 'is-invalid': submitted && recar.controls['bank_id'].errors }"
+                                        [items]="listBank" formControlName="bank_id" [style.width.px]="740" bindLabel="name"
+                                        bindValue="id">
+                                    </ng-select>
+                                    <div *ngIf="submitted && recar.controls['bank_id'].errors" class="invalid-feedback">
+                                        <div *ngIf="recar.controls['bank_id'].errors?.['required']">Banco es requerido
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p></p>
+                    <div class="col-md-6" >
+                        <div class="form-group">
+                            <label for="mensaje">Fecha y Hora</label>
+                            <input type="text" class="form-control" formControlName="date_hour" [ngClass]="{ 'is-invalid': submitted && recar.controls['date_hour'].errors }">
+                            <div *ngIf="recar.controls['date_hour'].errors" class="invalid-feedback">
+                                <span *ngIf="recar.controls['date_hour'].errors?.['required']">Fecha y Hora requerido</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" >
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label for="formFile" class="form-label">Subir Vaucher</label>
+                                <input [ngClass]="{ 'is-invalid': submitted && recar.controls['vaucher'].errors }" (change)="onFileSelected($event)"  class="form-control" type="file" id="formFile"  accept="image/*">
+                                <div *ngIf="submitted && recar.controls['vaucher'].errors" class="invalid-feedback">
+                                    <div *ngIf="recar.controls['vaucher'].errors?.['required']">Vaucher es requerido
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+       
+                </div>
+                <p></p>
+                <button type="submit" class="btn btn-primary">
+                    <span class="d-flex justify-content-center" *ngIf="!isLoading">Recargar</span>
+                    <i *ngIf="isLoading" class="fas fa-spinner fa-pulse fa-1x"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</ng-template>

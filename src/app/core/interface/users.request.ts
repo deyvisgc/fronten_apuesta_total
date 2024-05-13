@@ -1,9 +1,6 @@
-import { ModulosRequest } from "./modulos.request";
-
-export interface UserRequest {
+export interface User {
   email: string,
   password?: string,
   name: string,
   id_rol: number,
-  modulo: ModulosRequest[]
 }

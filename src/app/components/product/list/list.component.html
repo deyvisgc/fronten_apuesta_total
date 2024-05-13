@@ -1,0 +1,54 @@
+
+
+<div class="d-flex justify-content-between" style="margin-top: 50px;">
+    <div class="form-group">
+      <input type="text" class="form-control" [(ngModel)]="textSearch" id="name" placeholder="Buscar" />
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table align-middle text-nowrap">
+      <thead>
+        <tr>
+          <th class="text-dark font-medium fs-4">#</th>
+          <th class="text-dark font-medium fs-4">Producto</th>
+          <th class="text-dark font-medium fs-4">Descripcion Producto</th>
+          <th class="text-dark font-medium fs-4">Stock Producto</th>
+          <th class="text-dark font-medium fs-4">Precio Producto</th>
+          <th class="text-dark font-medium fs-4">Categoria</th>
+          <th class="text-dark font-medium fs-4">Fecha Registro</th>
+          <th class="text-dark font-medium fs-4">Estado</th>
+          <th class="text-dark font-medium fs-4">Opciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf=" list?.content| search : textSearch as result">
+          <!-- <tr  *ngFor="let items of result | search:textSearch | slice : (currentPage - 1) * totalPages : (currentPage - 1) * totalPages + totalPages; let i = index"> -->
+
+          <tr *ngFor="let item of result | search:textSearch; let i = index">
+            <td>
+                {{i + 1}}
+            </td>
+            <td class="fs-4">{{item.codigoProducto}} - {{item.nombreProducto}}</td>
+            <td class="fs-4">{{item.descripcionProducto}}</td>
+            <td class="fs-4">{{item.stockProducto}} </td>
+            <td class="fs-4">{{item.precioProducto}}</td>
+            <td class="fs-4">{{item?.categoria?.nombre}}</td>
+            <td class="fs-4">{{item.fechaRegistro | date:"shortDate"}}</td>
+            <td class="fs-4">{{item.estado}}</td>
+            <td>
+              <button type="button" ngbTooltip="Actualizar Producto" (click)="edit(item.id)" class="btn btn-outline-success w-sm btn-sm" style="margin-left: 5px">
+                <span><i class="fas fa-edit"></i></span>
+              </button>
+              <button type="button" ngbTooltip="Eliminar Producto" (click)="eliminar(item.id)" class="btn w-sm btn-sm btn-outline-danger"
+                  style="margin-left: 5px">
+                  <span><i class="fas fa-trash"></i></span>
+                </button>
+            </td>
+          </tr>
+
+        </ng-container>
+      </tbody>
+    </table>
+    <app-pagination [currentPage]="currentPage" [totalPages]="totalPages" [totalRegistros]="totalRegistros"
+      [totalRegistrosPage]="totalRegistroPage" (pageChange)="onPageChange($event)"></app-pagination>
+  </div>

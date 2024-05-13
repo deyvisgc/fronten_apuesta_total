@@ -10,12 +10,30 @@ export class TokenService {
   saveToken(token: string) {
     sessionStorage.setItem(KeySession.TOKEN, token)
   }
+  saveRolLogin(role: string) {
+    sessionStorage.setItem(KeySession.ROLLOGIN, role)
+  }
+  saveSalesId(id: string) {
+    sessionStorage.setItem(KeySession.SALESID, id)
+  }
+  saveClientId(id: string) {
+    sessionStorage.setItem(KeySession.CLIENTID, id)
+  }
   saveTokenApi(token: string) {
     sessionStorage.setItem(KeySession.TOKEN_API, token)
   }
   
   getToken() {
     return sessionStorage.getItem(KeySession.TOKEN)
+  }
+  getSalesId() {
+    return sessionStorage.getItem(KeySession.SALESID)
+  }
+  getRolLogin() {
+    return sessionStorage.getItem(KeySession.ROLLOGIN)
+  }
+  getClientId() {
+    return sessionStorage.getItem(KeySession.CLIENTID)
   }
   getTokenApi() {
     return sessionStorage.getItem(KeySession.TOKEN_API)

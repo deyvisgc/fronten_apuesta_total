@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../service/auth.service';
 import { CommonModule } from '@angular/common';
 
@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-login',
   templateUrl: './login.component.html',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule],
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
@@ -47,7 +47,7 @@ export class LoginComponent {
       this.isLoading = true
       this.authenticationService.login(this.f.controls["email"].value, this.f.controls["password"].value)
       .subscribe((res: any) => {
-        this.router.navigate(['system/dashboard']);
+        this.router.navigate(['page/welcome']);
         this.isLoading = false
         }, (err: any) => {
           // if (err && err.status === 409) {

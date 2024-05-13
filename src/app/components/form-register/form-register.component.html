@@ -1,0 +1,178 @@
+<form class="login-form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+        <div class="" [ngClass]="isDni ? 'col-md-5' : 'col-md-6'" >
+            <div class="custom-dropdown-container">
+                <div class="form-group">
+                    <label for="inputNombre">Tipo Documento</label>
+                    <div class="input-group">
+                        <ng-select [style.width.px]="300" (change)="changeDocument()" [ngClass]="{ 'is-invalid': submitted && f.controls['document_type'].errors }"
+                            [items]="tipoDocumento" bindLabel="desc" bindValue="cod" formControlName="document_type"
+                            placeholder="Seleccionar Perfil">
+                        </ng-select>
+                        <div *ngIf="submitted && f.controls['document_type'].errors" class="invalid-feedback">
+                            <div *ngIf="f.controls['document_type'].errors?.['required']">Tipo Documento es requerido
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="" [ngClass]="isDni ? 'col-md-5' : 'col-md-6'" >
+            <div class="form-group">
+                <label for="inputNombre">Numero Documento</label>
+                <input type="text" appNumberOnly formControlName="document_number" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.controls['document_number'].errors }" />
+                <div *ngIf="submitted && f.controls['document_number']?.errors" class="invalid-feedback">
+                    <div *ngIf="f.controls['document_number']?.errors?.['required']">Numero documento es requerido
+                    </div>
+                    <div *ngIf="f.controls['document_number']?.errors?.['minlength']"> Numero documento debe tener
+                        minimo 11 dijitos
+                    </div>
+                    <div *ngIf="f.controls['document_number']?.errors?.['maxlength']">Numero documento debe tener maximo
+                        15 dijitos
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2" style="margin-top: 25px;" *ngIf="isDni">
+            <div class="form-group">
+                <button type="button" class="form-control btn btn-primary  submit px-3">
+                    <span class="d-flex justify-content-center" (click)="buscar()" *ngIf="!isSearch">Buscar</span>
+                    <i *ngIf="isSearch" class="fas fa-spinner fa-pulse fa-2x"></i>
+                </button>
+            </div>
+        </div>
+        <p></p>
+        <div class="" [ngClass]="isClient ? 'col-md-12' : 'col-md-7'" >
+            <div class="form-group">
+                <label for="inputNombre">Nombre</label>
+                <input type="text" formControlName="name" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.controls['name'].errors }" />
+                <div *ngIf="submitted && f.controls['name']?.errors" class="invalid-feedback">
+                    <div *ngIf="f.controls['name']?.errors?.['required']">Nombre es requerido
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5" *ngIf="!isClient">
+            <div class="custom-dropdown-container">
+                <div class="form-group">
+                    <label for="inputNombre">Perfil</label>
+                    <div class="input-group">
+                        <ng-select [ngClass]="{ 'is-invalid': submitted && f.controls['role'].errors }"
+                            formControlName="role" [items]="lisRole" [style.width.px]="300" bindLabel="name"
+                            bindValue="id" placeholder="Seleccionar Perfil">
+                        </ng-select>
+                        <div *ngIf="submitted && f.controls['role'].errors" class="invalid-feedback">
+                            <div *ngIf="f.controls['role'].errors?.['required']">Perfil es requerido</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p></p>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="inputNombre">Telefono</label>
+                <input type="text" appNumberOnly formControlName="phone" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.controls['phone'].errors }" />
+                <div *ngIf="submitted && f.controls['phone']?.errors" class="invalid-feedback">
+                    <div *ngIf="f.controls['phone']?.errors?.['required']">Telefono es requerido
+                    </div>
+                    <div *ngIf="f.controls['phone']?.errors?.['minlength']"> Telefono debe tener minimo 9 dijitos
+                    </div>
+                    <div *ngIf="f.controls['phone']?.errors?.['maxlength']"> Telefono documento debe tener maximo 9
+                        dijitos
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="inputNombre">Direcciòn</label>
+                <input type="text" formControlName="addres" class="form-control" />
+            </div>
+        </div>
+        <p></p>
+        <div class="col-md-6">
+
+            <div class="form-group">
+                <label for="inputNombre">Correo electrónico</label>
+                <input type="email" formControlName="email" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.controls['email'].errors }" />
+                <div *ngIf="submitted && f.controls['email']?.errors" class="invalid-feedback">
+                    <div *ngIf="f.controls['email']?.errors?.['required']">Email es requerido
+                    </div>
+                    <div *ngIf="f.controls['email'].errors?.['email']"> El correo electrónico
+                        debe ser valido</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="inputNombre">Contraseña</label>
+                <input type="password" class="form-control" formControlName="password" placeholder="Enter password"
+                    [ngClass]="{ 'is-invalid': submitted && f.controls['password'].errors }" aria-label="Password"
+                    aria-describedby="password-addon">
+                <div *ngIf="f.controls['password'].errors" class="invalid-feedback">
+                    <span *ngIf="f.controls['password'].errors?.['required']">Contraseña es
+                        requerido</span>
+                </div>
+            </div>
+        </div>
+        <p></p>
+        <div class="col-md-4">
+            <div class="custom-dropdown-container">
+                <div class="form-group">
+                    <label for="inputNombre">Departamento</label>
+                    <div class="input-group">
+                        <ng-select [items]="lisDepartamento" (change)="province()" [ngClass]="{ 'is-invalid': submitted && f.controls['cod_departament'].errors }" formControlName="cod_departament" [style.width.px]="300"
+                            bindLabel="nombre" bindValue="codigo">
+                        </ng-select>
+                        <div *ngIf="submitted && f.controls['cod_departament'].errors" class="invalid-feedback">
+                            <div *ngIf="f.controls['cod_departament'].errors?.['required']">Departamento es requerido</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="custom-dropdown-container">
+                <div class="form-group">
+                    <label for="inputNombre">Provincia</label>
+                    <div class="input-group">
+                        <ng-select [items]="lisProvincia" (change)="distrito()"  [ngClass]="{ 'is-invalid': submitted && f.controls['cod_province'].errors }" formControlName="cod_province" [style.width.px]="300"
+                            bindLabel="nombre" bindValue="codigo">
+                        </ng-select>
+                        <div *ngIf="submitted && f.controls['cod_province'].errors" class="invalid-feedback">
+                            <div *ngIf="f.controls['cod_province'].errors?.['required']">Provincia es requerido</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="custom-dropdown-container">
+                <div class="form-group">
+                    <label for="inputNombre">Distrito</label>
+                    <div class="input-group">
+                        <ng-select  [ngClass]="{ 'is-invalid': submitted && f.controls['cod_district'].errors }" [items]="lisDistrito" formControlName="cod_district" [style.width.px]="300"
+                            bindLabel="nombre" bindValue="codigo">
+                        </ng-select>
+                        <div *ngIf="submitted && f.controls['cod_district'].errors" class="invalid-feedback">
+                            <div *ngIf="f.controls['cod_district'].errors?.['required']">Distrito es requerido</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="form-group">
+        <button type="submit" class="form-control btn btn-primary rounded submit px-3">
+            <span *ngIf="!isLoading">Guardar</span>
+            <i *ngIf="isLoading" class="fas fa-spinner fa-pulse fa-2x"></i>
+        </button>
+    </div>
+</form>

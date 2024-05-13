@@ -1,0 +1,41 @@
+<div class="card">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="form-group">
+          <label for="inputNombre">Fecha Inicio</label>
+          <div class="input-group">
+            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="filter.fechaIni"
+              ngbDatepicker #dateIni="ngbDatepicker" />
+            <button class="btn btn-outline-secondary bi bi-calendar3" (click)="dateIni.toggle()"
+              type="button"></button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <label for="inputNombre">Fecha Fin</label>
+          <div class="input-group">
+            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="filter.fechaFin"
+              (dateSelect)="onSearchDate()" ngbDatepicker #dateFin="ngbDatepicker" />
+            <button class="btn btn-outline-secondary bi bi-calendar3" (click)="dateFin.toggle()"
+              type="button"></button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="custom-dropdown-container">
+          <div class="form-group">
+            <label for="inputNombre">Categoria</label>
+            <div class="input-group">
+              <ng-select [items]="categoria" (change)="onSearchFamily()" [(ngModel)]="filter.categoria"
+                [style.width.px]="300" bindLabel="name_cate" bindValue="id">
+              </ng-select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <button class="btn btn-outline-danger btn-group-lg btn-sm"  style="margin-top: 25px;" aria-controls="collapseExample" (click)="clearFilter()">Limpiar filter<i class="fas fa-eraser"></i></button>
+      </div>
+    </div>
+</div>

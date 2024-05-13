@@ -3,17 +3,17 @@ import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/c
 import { EMPTY, Observable, of, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { NotificationService } from '../service/notification.service';
-import { AuthService } from 'src/app/auth/service/auth.service';
+import { Router } from '@angular/router';
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-    constructor(private authenticationService: AuthService, private toastService: NotificationService) { }
+    constructor( private toastService: NotificationService,  private router: Router) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        return next.handle(request).pipe(catchError(err => {
+        return next.handle(request).pipe(catchError((err: any) => {
 
             if (err.status === 401) {
                 // auto logout if 401 response returned from api
-                this.authenticationService.logout();
+                this.router.navigate(['/login']);
             }
             if (err.status === 403) {
                 this.toastService.error("Session terminada vuelva a iniciar session")

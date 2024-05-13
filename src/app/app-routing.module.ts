@@ -1,28 +1,30 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+
+import { Routes } from '@angular/router';
 
 import { FullComponent } from './layouts/full/full.component';
 import { LoginComponent } from './auth/login/login.component';
+import { RegisterComponent } from './auth/register/register.component';
+import { AuthGuard } from './auth.guard';
 
 export const Approutes: Routes = [
-  //routinbs
   {
     path: 'login',
     component: LoginComponent,
   },
   {
-    path: 'system',
+    path: 'register',
+    component: RegisterComponent,
+  },
+  {
+    path: 'page',
     component: FullComponent,
     children: [
       {
-        path: 'dashboard',
-        loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)
-      },
-      {
-        path: 'component',
-        loadChildren: () => import('./component/component.module').then(m => m.ComponentsModule)
+        path: '',
+        loadChildren: () => import('./page/page.module').then(m => m.PageModule), canActivate: [AuthGuard]
       }
     ]
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
+
 ];

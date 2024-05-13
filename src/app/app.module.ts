@@ -14,15 +14,14 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FullComponent } from './layouts/full/full.component';
 
 
-import { NavigationComponent } from './shared/header/navigation.component';
-import { SidebarComponent } from './shared/sidebar/sidebar.component';
-
 import { Approutes } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { SpinnerComponent } from './shared/spinner.component';
 import { JwtInterceptorInterceptor } from './core/helpers/jwt-interceptor.interceptor';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
 import { ErrorInterceptor } from './core/helpers/error.interceptor';
+import { NavigationComponent } from './layouts/header/navigation.component';
+import { SidebarComponent } from './layouts/sidebar/sidebar.component';
+import { SpinnerComponent } from './layouts/spinner.component';
 const notifierOptions: NotifierOptions = {
   position: {
     horizontal: {
@@ -65,8 +64,7 @@ const notifierOptions: NotifierOptions = {
 @NgModule({
   declarations: [
     AppComponent,
-    SpinnerComponent
-  ],
+    SpinnerComponent  ],
   
   imports: [
     CommonModule,
@@ -76,7 +74,8 @@ const notifierOptions: NotifierOptions = {
     ReactiveFormsModule,
     HttpClientModule,
     NgbModule,
-    RouterModule.forRoot(Approutes, {useHash: true}),
+    // RouterModule.forRoot(Approutes, {useHash: true}),
+    RouterModule.forRoot(Approutes),
     FullComponent,
     NavigationComponent,
     SidebarComponent,
@@ -84,10 +83,10 @@ const notifierOptions: NotifierOptions = {
   ],
   //provide: LocationStrategy, useClass: HashLocationStrategy
   providers: [
-    {
-      provide: LocationStrategy,
-      useClass: HashLocationStrategy
-    },
+    // {
+    //   provide: LocationStrategy,
+    //   useClass: HashLocationStrategy
+    // },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptorInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],

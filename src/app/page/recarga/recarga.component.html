@@ -1,0 +1,136 @@
+
+
+<div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+
+          <h4 class="card-title">Recargas de Saldo</h4><p></p>
+          <div class="d-flex justify-content-end">
+          </div>
+
+          <div class="d-flex justify-content-between" style="margin-top: 50px;">
+            <div class="form-group">
+              <input type="text" class="form-control" [(ngModel)]="textSearch" id="name" placeholder="Buscar" />
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table align-middle text-nowrap">
+              <thead>
+                <tr>
+                  <th class="text-dark font-medium fs-4">Nombre Cliente</th>
+                  <th class="text-dark font-medium fs-4">Canal</th>
+                  <th class="text-dark font-medium fs-4">Monto</th>
+                  <th class="text-dark font-medium fs-4">Fecha y Hora</th>
+                  <th class="text-dark font-medium fs-4">Id Jugador</th>
+                  <th class="text-dark font-medium fs-4">Banco</th>
+                  <th class="text-dark font-medium fs-4">Opciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngIf=" list| search : textSearch as result">        
+                  <tr *ngFor="let item of result | search:textSearch; let i = index">
+                    <td class="fs-4">{{item?.nombreCLiente}}</td>
+                    <td class="fs-4">{{item?.canal}}</td>
+                    <td class="fs-4">{{item?.monto}} </td>
+                    <td class="fs-4">{{item?.fechaHora}}</td>
+                    <td class="fs-4">{{item?.player_id}}</td>
+                    <td class="fs-4">{{item?.name_bank}}</td>
+                    <td>
+                      <button type="button" ngbTooltip="Actualizar Deposito" (click)="edit(item?.id, recargarModalUpdate)" class="btn btn-outline-success w-sm btn-sm" style="margin-left: 5px">
+                        <span><i class="fas fa-edit"></i></span>
+                      </button>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #recargarModalUpdate let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Actualzar Recargas para Apuestas Deportivas</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="getDismissReason(0)"></button>
+    </div>
+    <div class="modal-body">
+        <div class="container mt-2">
+            <form  [formGroup]="recargarForm" (ngSubmit)="updaterecargaCuenta()">
+                <div class="row">
+                    <div class="col-md-6" >
+                        <div class="form-group">
+                            <label for="canal">Canal</label>
+                            <input type="text" class="form-control" formControlName="chanel" readonly >
+                        </div>
+                    </div>
+                    <div class="col-md-6" >
+                        <div class="form-group">
+                            <label for="canal">Id Jugador</label>
+                            <input type="text" class="form-control" formControlName="player_id" readonly >
+                        </div>
+                    </div>
+                    <p></p>
+                    <div class="col-md-6" >
+                        <div class="form-group">
+                            <label for="canal">Monto</label>
+                            <input type="text" class="form-control" appNumberDecimals formControlName="monto" [ngClass]="{ 'is-invalid': submitted && recar.controls['monto'].errors }">
+        
+                            <div *ngIf="recar.controls['monto'].errors" class="invalid-feedback">
+                                <span *ngIf="recar.controls['monto'].errors?.['required']">Monto es requerido</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" >
+                        <div class="custom-dropdown-container">
+                            <div class="form-group">
+                                <label for="inputNombre">BANCO</label>
+                                <div class="input-group">
+                                    <ng-select [ngClass]="{ 'is-invalid': submitted && recar.controls['bank_id'].errors }"
+                                        [items]="listBank" formControlName="bank_id" [style.width.px]="740" bindLabel="name"
+                                        bindValue="id">
+                                    </ng-select>
+                                    <div *ngIf="submitted && recar.controls['bank_id'].errors" class="invalid-feedback">
+                                        <div *ngIf="recar.controls['bank_id'].errors?.['required']">Banco es requerido
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p></p>
+                    <div class="col-md-6" >
+                        <div class="form-group">
+                            <label for="mensaje">Fecha y Hora</label>
+                            <input type="text" class="form-control" formControlName="date_hour" [ngClass]="{ 'is-invalid': submitted && recar.controls['date_hour'].errors }">
+                            <div *ngIf="recar.controls['date_hour'].errors" class="invalid-feedback">
+                                <span *ngIf="recar.controls['date_hour'].errors?.['required']">Fecha y Hora requerido</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" >
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label for="formFile" class="form-label">Subir Vaucher</label>
+                                <input [ngClass]="{ 'is-invalid': submitted && recar.controls['vaucher'].errors }" (change)="onFileSelected($event)"  class="form-control" type="file" id="formFile"  accept="image/*">
+                                <div *ngIf="submitted && recar.controls['vaucher'].errors" class="invalid-feedback">
+                                    <div *ngIf="recar.controls['vaucher'].errors?.['required']">Vaucher es requerido
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+       
+                </div>
+                <p></p>
+                <button type="submit" class="btn btn-primary">
+                    <span class="d-flex justify-content-center" *ngIf="!isLoading">Actualizar</span>
+                    <i *ngIf="isLoading" class="fas fa-spinner fa-pulse fa-1x"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</ng-template>

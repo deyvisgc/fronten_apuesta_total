@@ -1,0 +1,85 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="getDismissReason(0)"></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="space-y-3">
+      <div class="container mt-1">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <div class="form-group">
+              <label for="exampleInputName">Nombre Producto</label>
+              <input type="text" formControlName="nombreProducto" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted() && f.controls['nombreProducto'].errors }" id="nombreProducto"/>
+                <div *ngIf="submitted() && f.controls['nombreProducto'].errors" class="invalid-feedback">
+                <div *ngIf="f.controls['nombreProducto'].errors?.['required']">Nombre producto es requerido</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="form-group">
+              <label for="exampleInputName">Codigo Producto </label>
+              <input type="text" formControlName="codigoProducto" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted() && f.controls['codigoProducto'].errors }" id="codigoProducto" />
+              <div *ngIf="submitted() && f.controls['codigoProducto'].errors" class="invalid-feedback">
+                <div *ngIf="f.controls['codigoProducto'].errors?.['required']">Codigo producto es requerido</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="form-group">
+              <label for="exampleInputPassword1">Categoria</label>
+              <div class="custom-dropdown-container">
+                <ng-select [ngClass]="{ 'is-invalid': submitted() && f.controls['categoria'].errors }" [items]="categoria"
+                  bindLabel="name_cate" formControlName="categoria" placeholder="Seleccionar Categoria" bindValue="id">
+                </ng-select>
+                <div *ngIf="submitted() && f.controls['categoria'].errors" class="invalid-feedback">
+                  <div *ngIf="f.controls['categoria'].errors?.['required']">Categoria es requerido</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="form-group">
+              <label for="exampleInputName">Precio Producto </label>
+              <input type="text" formControlName="precioProducto" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted() && f.controls['precioProducto'].errors }" id="precioProducto" />
+              <div *ngIf="submitted() && f.controls['precioProducto'].errors" class="invalid-feedback">
+                <div *ngIf="f.controls['precioProducto'].errors?.['required']">Precio producto es requerido</div>
+                <div *ngIf="f.controls['precioProducto'].errors?.['min']">Precio producto debe ser mayor a 0</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="form-group">
+              <label for="exampleInputName">Stock Producto </label>
+              <input type="text" formControlName="stockProducto" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted() && f.controls['stockProducto'].errors }" id="stockProducto" />
+              <div *ngIf="submitted() && f.controls['stockProducto'].errors" class="invalid-feedback">
+                <div *ngIf="f.controls['stockProducto'].errors?.['required']">Stock producto es requerido</div>
+                <div *ngIf="f.controls['stockProducto'].errors?.['min']">Stock producto debe ser mayor a 0</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="form-group">
+              <label for="exampleInputName">Descripcion Producto </label>
+            <textarea formControlName="descripcionProducto" class="form-control"
+            [ngClass]="{ 'is-invalid': submitted() && f.controls['descripcionProducto'].errors }"
+            class="form-control rounded" id="exampleFormControlTextarea1" rows="3"></textarea>
+              <div *ngIf="submitted() && f.controls['descripcionProducto'].errors" class="invalid-feedback">
+                <div *ngIf="f.controls['descripcionProducto'].errors?.['required']">Descripcion producto es requerido</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p></p>
+      <div class="form-group d-flex justify-content-end">
+        <button type="submit" class="btn btn-outline-info rounded">
+          <span *ngIf="!isLoading()">Guardar</span>
+          <i *ngIf="isLoading()" class="fas fa-spinner fa-pulse fa-2x"></i>
+        </button>
+      </div>
+    </form>
+  </div>
